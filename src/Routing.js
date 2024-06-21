@@ -12,6 +12,7 @@ import DisplayPlaylist from "./Pages/DisplayPlaylist";
 import Subscription from "./Pages/Subscription";
 import FullScreen from "./Pages/FullScreen";
 import DisplayAlbum from "./Pages/DisplayALbum";
+import Favorites from "./Pages/favroties";
 import { albumData, playlistData,artistData } from "./StaticData/constant";
 
 const Routing = () => {
@@ -29,30 +30,18 @@ const Routing = () => {
     const isArtist = location.pathname.includes('artist');
     const artistId = isArtist ? location.pathname.slice(-1) : '';
     const artistBgColor = artistData[Number(artistId)]?.artistBgColor;
-    
-    useEffect(() => {
-        if(isAlbum){
-            DisplayRef.current.style.background = `linear-gradient(${bgColor},#121212)`;
-        }else{
-            DisplayRef.current.style.background = '#121212';
-        }
-    }, [location])
 
     useEffect(() => {
-        if(isPlaylist){
-            DisplayRef.current.style.background = `linear-gradient(${playlistBgColor},#121212)`;
-        }else{
-            DisplayRef.current.style.background = '#121212';
+        let newBgColor = '#121212'; // Default background color
+        if (isAlbum && bgColor) {
+            newBgColor = `linear-gradient(${bgColor},#121212)`;
+        } else if (isPlaylist && playlistBgColor) {
+            newBgColor = `linear-gradient(${playlistBgColor},#121212)`;
+        } else if (isArtist && artistBgColor) {
+            newBgColor = `linear-gradient(${artistBgColor},#121212)`;
         }
-    }, [location])
-
-    useEffect(() => {
-        if(isArtist){
-            DisplayRef.current.style.background = `linear-gradient(${artistBgColor},#121212)`;
-        }else{
-            DisplayRef.current.style.background = '#121212';
-        }
-    }, [location])
+        DisplayRef.current.style.background = newBgColor;
+    }, [location, bgColor, playlistBgColor, artistBgColor]); // Depend on specific color variables to re-run only when necessary
 
     return (
         <div ref={DisplayRef} className="w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-gray-200 overflow-auto ml-0">
@@ -69,6 +58,7 @@ const Routing = () => {
             <Route path="/search" element={<Searchbar />} />
             <Route path="/artist/:id" element={<DisplayArtist />} />
             <Route path="/fullscreen" element={<FullScreen />} />
+            <Route path="/favorites" element={<Favorites />} />
         </Routes>
         </div>
     )

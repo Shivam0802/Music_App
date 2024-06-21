@@ -11,6 +11,16 @@ const PlayerContextProvider = ({ children }) => {
     const seekVolumeBg = useRef();
     const seekVolumeBar = useRef();
 
+    const [likedSongs, setLikedSongs] = useState(() => {
+        const savedLikedSongs = localStorage.getItem('likedSongs');
+        return savedLikedSongs ? JSON.parse(savedLikedSongs) : [];
+      });
+
+    const [favorites, setFavorites] = useState(() => {
+        const savedFavorites = localStorage.getItem('favorites');
+        return savedFavorites ? JSON.parse(savedFavorites) : [];
+      });
+
     const [track, setTrack] = useState(songData[0]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [mute, setMute] = useState(false);
@@ -79,23 +89,69 @@ const PlayerContextProvider = ({ children }) => {
         audioRef.current.currentTime = seek;
     };
 
+    const toggleLike = (song) => {
+        setLikedSongs((prevLikedSongs) =>
+            prevLikedSongs.includes(song.id)
+                ? prevLikedSongs.filter((id) => id !== song.id)
+                : [...prevLikedSongs, song.id]
+        );
+
+        setFavorites((prevFavorites) =>
+            prevFavorites.some(favSong => favSong.id === song.id)
+                ? prevFavorites.filter(favSong => favSong.id !== song.id)
+                : [...prevFavorites, song]
+        );
+    };
+
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         audioRef.current.ontimeupdate = () => {
+    //             seekBar.current.style.width = ((Math.floor(audioRef.current.currentTime) / Math.floor(audioRef.current.duration)) * 100) + '%';
+    //             setTime({
+    //                 currentTime: {
+    //                     second: Math.floor(audioRef.current.currentTime % 60),
+    //                     minute: Math.floor(audioRef.current.currentTime / 60)
+    //                 },
+    //                 totalDuration: {
+    //                     second: Math.floor(audioRef.current.duration % 60),
+    //                     minute: Math.floor(audioRef.current.duration / 60)
+    //                 }
+    //             })
+    //         }
+    //     }, 1000)
+    // }, [audioRef]);
+
     useEffect(() => {
-        setTimeout(() => {
-            audioRef.current.ontimeupdate = () => {
-                seekBar.current.style.width = ((Math.floor(audioRef.current.currentTime) / Math.floor(audioRef.current.duration)) * 100) + '%';
+        const audio = audioRef.current;
+        if (audio) {
+            const updateTime = () => {
+                const currentSeconds = Math.floor(audio.currentTime % 60);
+                const currentMinutes = Math.floor(audio.currentTime / 60);
+                const totalSeconds = Math.floor(audio.duration % 60);
+                const totalMinutes = Math.floor(audio.duration / 60);
+    
+                seekBar.current.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
                 setTime({
-                    currentTime: {
-                        second: Math.floor(audioRef.current.currentTime % 60),
-                        minute: Math.floor(audioRef.current.currentTime / 60)
-                    },
-                    totalDuration: {
-                        second: Math.floor(audioRef.current.duration % 60),
-                        minute: Math.floor(audioRef.current.duration / 60)
-                    }
-                })
-            }
-        }, 1000)
+                    currentTime: { second: currentSeconds, minute: currentMinutes },
+                    totalDuration: { second: totalSeconds, minute: totalMinutes }
+                });
+            };
+    
+            audio.addEventListener('timeupdate', updateTime);
+    
+            // Cleanup function to remove the event listener
+            return () => audio.removeEventListener('timeupdate', updateTime);
+        }
     }, [audioRef]);
+
+    useEffect(() => {
+        localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
+      }, [likedSongs]);
+    
+      useEffect(() => {
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+      }, [favorites]);
 
 
     const contextValue = {
@@ -110,7 +166,10 @@ const PlayerContextProvider = ({ children }) => {
         previous, next,
         seekSong,
         muteAudio, mute,
-        seekVolumeBg, seekVolumeBar, volume
+        seekVolumeBg, seekVolumeBar, volume,
+        likedSongs, setLikedSongs,
+        toggleLike,
+        favorites, setFavorites
     };
 
     return (

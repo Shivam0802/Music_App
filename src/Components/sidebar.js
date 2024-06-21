@@ -9,20 +9,14 @@ import { TiThList } from "react-icons/ti";
 import { TbPlaylistAdd } from "react-icons/tb";
 import { HiFolder } from "react-icons/hi2";
 import { FaListCheck } from "react-icons/fa6";
-import { playlistData } from "../StaticData/constant";
 
 const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
-
-    if(playlistData.id === 0) {
-        
-    }
-
+    
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
-
 
     return (
         <div className="flex flex-col w-[20%] p-2 h-full gap-2 hidden lg:flex">
@@ -69,7 +63,7 @@ const Sidebar = () => {
                         <div className={`absolute left-3 mt-2 w-fit bg-[#121212] rounded shadow-lg ${isOpen ? 'block' : 'hidden'}`}>
                             <div className="block flex flex-row gap-2  px-2 py-2 text-gray-200 hover:bg-[#242424] rounded cursor-pointer">
                                 <TbPlaylistAdd size={20} style={{ color: 'turquoise' }} />
-                                Create new Playlist
+                                Create Playlist
                             </div>
                             <div className="block flex flex-row gap-2 px-2 py-2 text-gray-200 hover:bg-[#242424] rounded cursor-pointer">
                                 <HiFolder size={20} style={{ color: 'thistle' }} />
@@ -81,18 +75,10 @@ const Sidebar = () => {
                     </div>
                 </div>
                 <div className="p-2 bg-[#242424] m-2 rounded font-medium text-white flex flex-col item-start justify-start gap-2">
-                    <div className="flex flex-col px-2 text-gray-200 py-2 pl-2 hover:bg-[#151515] rounded cursor-pointer">
-                        
-                        <h2 className="text-[17px] font-medium text-gray-200">Top Trending Hindi</h2> 
-                    </div>
-                    <div className="flex flex-row px-2 text-gray-200 py-2 pl-2 hover:bg-[#151515] rounded cursor-pointer">
-                        <h2 className="text-[17px] font-medium text-gray-300">Top Trending English</h2>
-                    </div>
-                    {/* <h1 className="text-[17px] font-medium text-blue-300">Create your Playlist</h1>
-                    <p className="font-light text-[15px]">
-                        Add your favorite songs.
-                    </p>
-                    <button className="bg-orange-200 text-gray-900 p-2 rounded-full mt-4">Create Playlist</button> */}
+                    <Link to='/favorites' className="flex items-center gap-2 text-gray-200 hover:bg-[#242424] rounded p-2">
+                        <FaListCheck size={20} style={{ color: 'turquoise' }} />
+                        <span>Favorites</span>
+                    </Link>
                 </div>
                 <div className="p-2 flex items-center gap-3">
                     <img src="/Assets/subscription.png" alt="subscription" className="h-8" />
@@ -108,6 +94,7 @@ const Sidebar = () => {
                     </Link>
                 </div>
             </div>
+            
         </div>
     )
 }

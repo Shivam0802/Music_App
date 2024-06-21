@@ -276,7 +276,7 @@ export const artistData = [
     name: 'Ariana Grande',
     image: img16,
     desc: 'Artist',
-    about:'Arina Grande is an American singer and actress. She began her career in 2008 in the Broadway musical 13, before playing the role of Cat Valentine in the Nickelodeon television series Victorious and in the spinoff Sam & Cat. She has also appeared in other theatre and television roles and has lent her voice to animated television and films.',
+    about:'Ariana Grande is an American singer and actress. She began her career in 2008 in the Broadway musical 13, before playing the role of Cat Valentine in the Nickelodeon television series Victorious and in the spinoff Sam & Cat. She has also appeared in other theatre and television roles and has lent her voice to animated television and films.',
     artistBgColor: '#EFBC9B',
   },
   {
@@ -363,7 +363,7 @@ export const songData = [
   {
     id: 2,
     name: 'We Cant Be Friends',
-    artists: ['Arina Grande','Saweetie'],
+    artists: ['Ariana Grande','Saweetie'],
     images: img22,
     audio: song3,
     desc: 'A song you can listen to anytime.',

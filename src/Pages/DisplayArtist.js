@@ -6,7 +6,7 @@ import { artistData, songData } from "../StaticData/constant";
 
 const DisplayArtist = () => {
 
-    const { nextTrack } = useContext(PlayerContext);
+    const { nextTrack, toggleLike, likedSongs } = useContext(PlayerContext);
 
     const { id } = useParams();
     const Artist_Data = artistData[id];
@@ -16,9 +16,9 @@ const DisplayArtist = () => {
     }
 
     const filteredSongs = songData.filter((song) => {
-        // Assuming song.artists is an array of artist names
         return song.artists.includes(Artist_Data.name);
     });
+
     return (
         <>
             <Navbar />
@@ -46,15 +46,15 @@ const DisplayArtist = () => {
             </section>
             <hr className="border-[#a7a7a7] mb-4" />
             {
-                filteredSongs.map((song,index) => (
-                    <div onClick={() => nextTrack(song.id)} key={song.id} className="grid grid-cols-4 sm:grid-col-4 gap-2 p-2 text-[#a7a7a7] hover:bg-[#2424242b] rounded-md cursor-pointer">
+                filteredSongs.map((song, index) => (
+                    <div key={song.id} className="grid grid-cols-4 sm:grid-col-4 gap-2 p-2 text-[#a7a7a7] hover:bg-[#2424242b] rounded-md cursor-pointer">
                         <div className="flex items-center">
                             <div className="w-10">
                                 <p className="mr-1">{index + 1}</p>
                             </div>
                             <div className="flex flex-row ml-1">
                                 <img src={song.images} alt='song' className="w-10 h-10" />
-                                <p className="ml-2 text-white">{song.name}</p>
+                                <p onClick={() => nextTrack(song.id)} className="ml-2 text-white">{song.name}</p>
                             </div>
                         </div>
                         <p className="text-[15px] text-gray-500 hidden ml-[4rem] sm:block">2 Days ago</p>
@@ -63,9 +63,11 @@ const DisplayArtist = () => {
                             <button className="bg-[#FFF5E1] rounded px-4 py-2 text-gray-900 hover:bg-[#F6E6CB]">
                                 Add to Playlist
                             </button>
-                            <button className="flex flex-row gap-2 bg-[#373A40] rounded p-2 text-gray-200 hover:bg-[#686D76]">
-                                <img src="/Assets/Like.png" alt='Like' className="w-6 h-auto" />
-                                Like
+                            <button
+                                className={`py-1 px-3 rounded ${likedSongs.includes(song.id) ? 'bg-[#C80036] text-white' : 'bg-[#DBB5B5] text-gray-900'}`}
+                                onClick={() => toggleLike(song)}
+                            >
+                                {likedSongs.includes(song.id) ? 'Liked' : 'Like'}
                             </button>
                         </div>
                     </div>
