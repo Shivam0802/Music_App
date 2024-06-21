@@ -20,7 +20,7 @@ const Player = () => {
         if (isFullScreen) {
             Navigate('/');
         } else {
-            Navigate('/fullscreen');
+            Navigate(`/${track.name}`);
         }
     };
 

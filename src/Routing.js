@@ -57,7 +57,7 @@ const Routing = () => {
             <Route path="/playlist/:id" element={<DisplayPlaylist />} />
             <Route path="/search" element={<Searchbar />} />
             <Route path="/artist/:id" element={<DisplayArtist />} />
-            <Route path="/fullscreen" element={<FullScreen />} />
+            <Route path="/:name" element={<FullScreen />} />
             <Route path="/favorites" element={<Favorites />} />
         </Routes>
         </div>
